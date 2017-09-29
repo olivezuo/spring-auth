@@ -1,0 +1,24 @@
+package com.jin.data.datasource;
+
+import javax.sql.DataSource;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
+@Configuration
+@ConfigurationProperties(prefix = "com.jin.datasource.master")
+public class MasterDBConfig extends HikariConfig {
+
+	@Bean
+	public DataSource masterDataSource() {
+		final HikariDataSource masterDataSource = new HikariDataSource(this);
+		
+
+		return masterDataSource;
+	}
+
+}

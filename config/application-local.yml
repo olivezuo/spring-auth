@@ -1,0 +1,78 @@
+server:
+  port: 7070
+  context-path: /spring-auth
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    preferIpAddress: false
+    health-check-url-path: /spring-auth/health
+    status-page-url-path: /spring-auth/info
+com:
+  jin:
+    datasource:
+      master:
+        dataSourceProperties:
+          user: root
+          password: 123456
+          serverName: localhost
+          portNumber: 3306
+          databaseName: security          
+        dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
+        connectionTimeout: 2000
+        poolName: masterPool
+        maximumPoolSize: 10
+      slave:
+        dataSourceProperties:
+          user: root
+          password: 123456
+          serverName: localhost
+          portNumber: 3307
+          databaseName: security
+        dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
+        connectionTimeout: 2000
+        poolName: slavePool
+        maximumPoolSize: 20
+security:
+  basic:
+    enabled: true
+spring:
+  application:
+    name: spring-auth
+  jpa:
+    database-platform: 
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  data:
+    redis:
+      repositories:
+        enabled: false
+  redis:
+    # cluster:
+      # max-redirects: # Maximum number of redirects to follow when executing commands across the cluster.
+      # nodes: localhost:6379, localhost:6380 # Comma-separated list of "host:port" pairs to bootstrap from.
+    database: 0 # Database index used by the connection factory.
+    # url:  # Connection URL, will override host, port and password (user will be ignored), e.g. redis://user:password@example.com:6379
+    host: localhost # Redis server host.
+    # password:  # Login password of the redis server.
+    ssl: false # Enable SSL support.
+    pool:
+      max-active: 8 # Max number of connections that can be allocated by the pool at a given time. Use a negative value for no limit.
+      max-idle: 8 # Max number of "idle" connections in the pool. Use a negative value to indicate an unlimited number of idle connections.
+      max-wait: 1 # Maximum amount of time (in milliseconds) a connection allocation should block before throwing an exception when the pool is exhausted. Use a negative value to block indefinitely.
+      min-idle: 0 # Target for the minimum number of idle connections to maintain in the pool. This setting only has an effect if it is positive.
+    port: 6379 # Redis server port.
+    # sentinel:
+      # master: # Name of Redis server.
+      # nodes: # Comma-separated list of host:port pairs.
+    timeout: 0 # Connection timeout in milliseconds.
+  cache:
+    type: redis # 'none' for no-op implementation
+    cache-names: authacl
+management:
+  security:
+    enabled: false
+logging:
+  file: ./target/spring-auth.log
